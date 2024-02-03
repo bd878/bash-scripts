@@ -1,0 +1,12 @@
+Current time and date:
+05:40 2024-01-29
+
+Logged-in users:
+ 05:40:49 up  1:20,  3 users,  load average: 0,04, 0,08, 0,09
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+user     tty7     :0               04:20    1:20m 34.39s  0.51s cinnamon-session --session cinnamon
+user     pts/1    :pts/0:S.0       05:01    1.00s  0.13s  0.00s /bin/bash ./introscript.sh intro.log
+user     pts/2    :pts/0:S.1       05:04   49.00s  0.14s  0.14s /bin/bash
+
+Uptime:
+up 1 hour, 20 minutes

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Makes shell executable file
+# in current directory, makes it executable
+# and opens vi editor with it
+
+if [ $# -ne 1 ]; then
+  echo "Usage: mkf name"
+  exit 1
+fi
+
+FILENAME="$1.sh"
+
+touch "$FILENAME"
+chmod +x "$FILENAME"
+echo -e "#!/bin/bash\n" > "$FILENAME"
+exec sh -c "vi $FILENAME"
+
+exit 0
+
