@@ -11,6 +11,12 @@ fi
 
 FILENAME="$1.sh"
 
+if [ -e $FILENAME ]
+then
+  echo "File $FILENAME exists. Exit"
+  echo 1
+fi
+
 touch "$FILENAME"
 chmod +x "$FILENAME"
 echo -e "#!/bin/bash\n" > "$FILENAME"
