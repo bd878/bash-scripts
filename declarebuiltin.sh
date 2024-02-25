@@ -28,5 +28,39 @@ declare -p RONLY
 declare -p OTHERVAR
 declare -p ARRAY
 
+# ...more on declare
+declare -r var1=1
+echo "var1 = $var1" # var1 = 1
+
+(( var1++ ))        # error: var1: readonly variable
+
+# typing variable means classify and restrict
+# its properties
+
+declare -i number
+# will treat subsequent occurrences of "number" as an integer
+
+number=3
+echo "Number = $number" # Number = 3
+
+number=three
+echo "Number = $number" # Number = 0
+# Evaluate string "three" as an integer
+
+declare -f function_name # lists just the function named
+
+declare -f # list all functions previously defined in that script
+
+declare -x var3=373 # export var3 outside current script environment
+
+func1 ()
+{
+  echo This is a function
+}
+
+declare -f
+
+echo
+
 exit 0;
 
