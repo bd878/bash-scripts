@@ -1,0 +1,48 @@
+#!/bin/bash
+
+GO="/home/danilov/pkgs/usr/lib/golang/bin/go"
+BUILDDIR="/tmp/"
+TARGET="/usr/local/bin/"
+REPO="/home/danilov/flashcall.git"
+SMPP="/home/danilov/smpp.git"
+GOSIP="/home/danilov/gosip.git"
+LOGGER="/home/danilov/logger.git"
+GRPCNET="/home/danilov/grpcnet.git"
+SYSTEMCTL="/usr/bin/systemctl"
+SERVICE="flashcall"
+
+echo "cloning into $BUILDDIR"
+cd "$BUILDDIR"
+rm -rf "flashcall"
+git clone "$REPO"
+[ ! -e smpp ] && { echo "cloning smpp"; git clone "$SMPP" -b main; }
+[ ! -e logger ] && { echo "cloning logger"; git clone "$LOGGER" -b main; }
+[ ! -e gosip ] && { echo "cloning gosip"; git clone "$GOSIP" -b main; }
+[ ! -e grpcnet ] && { echo "cloning grpcnet"; git clone "$GRPCNET" -b tts_server; }
+cd "flashcall"
+echo "building..."
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/danilov/pkgs/usr/lib64/
+export LIBRARY_PATH=$LIBRARY_PATH:/home/danilov/pkgs/usr/lib64/
+export SEARCH_DIR=$SEARCH_DIR:/home/danilov/pkgs/usr/lib64/
+#export LIBS="-lresolv -lc_nonshared"
+#export CXX="/home/danilov/pkgs/usr/bin/x86_64-redhat-linux-gcc"
+#export CC="/home/danilov/pkgs/usr/bin/cc"
+export CGO_CXXFLAGS="-I /home/danilov/pkgs/usr/lib64/" 
+export CGO_CFLAGS="-I /home/danilov/pkgs/usr/include/ -I /home/danilov/pkgs/lib64/ -I /home/danilov/pkgs/usr/lib64/"
+export CGO_LDFLAGS="-L/home/danilov/pkgs/usr/lib64 -lresolv -lc"
+
+"$GO" build -x -buildvcs=false ./cmd/flashcall/
+
+echo "moving to $TARGET"
+sudo mv ./flashcall "$TARGET"
+restorecon -vr $TARGET/flashcall
+
+echo "restart flashcall.service"
+sudo $SYSTEMCTL stop $SERVICE
+sudo $SYSTEMCTL start $SERVICE
+
+echo "done."
+
+exit 0;
+
